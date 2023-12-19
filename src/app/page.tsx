@@ -1,10 +1,11 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 const celebrities = [
   {
-    firstName: 'Elon',
-    lastName: 'Musk',
+    first_name: 'Elon',
+    last_name: 'Musk',
     image:
       'https://c4.wallpaperflare.com/wallpaper/1012/124/930/men-elon-musk-wallpaper-preview.jpg',
     age: 50,
@@ -16,15 +17,15 @@ const celebrities = [
       zipCode: '54321',
     },
     hobbies: ['Inventing', 'Space Exploration', 'Twitter'],
-    isAdmin: true,
+
     bio: 'Entrepreneur, inventor, and CEO known for founding SpaceX and Tesla.',
     occupation: 'CEO',
-    countryOfOrigin: 'United States',
-    relationshipStatus: 'Divorced',
+    country_of_origin: 'United States',
+    relationship_status: 'Divorced',
   },
   {
-    firstName: 'Oprah',
-    lastName: 'Winfrey',
+    first_name: 'Oprah',
+    last_name: 'Winfrey',
     image:
       'https://c4.wallpaperflare.com/wallpaper/825/71/753/aretha-franklin-haircut-dress-makeup-wallpaper-preview.jpg',
     age: 68,
@@ -36,16 +37,15 @@ const celebrities = [
       zipCode: '98765',
     },
     hobbies: ['Media Production', 'Philanthropy', 'Book Club'],
-    isAdmin: false,
     bio: 'Media mogul, talk show host, and philanthropist with a passion for literature.',
     occupation: 'Media Mogul',
-    countryOfOrigin: 'United States',
-    relationshipStatus: 'Single',
+    country_of_origin: 'United States',
+    relationship_status: 'Single',
   },
 
   {
-    firstName: 'Beyoncé',
-    lastName: 'Knowles',
+    first_name: 'Beyoncé',
+    last_name: 'Knowles',
     image:
       'https://c4.wallpaperflare.com/wallpaper/624/628/63/beyonce-knowles-8-wallpaper-preview.jpg',
     age: 40,
@@ -57,15 +57,14 @@ const celebrities = [
       zipCode: '13579',
     },
     hobbies: ['Singing', 'Dancing', 'Acting'],
-    isAdmin: false,
     bio: 'International music icon, singer, and actress with a powerful stage presence.',
     occupation: 'Musician',
-    countryOfOrigin: 'United States',
-    relationshipStatus: 'Married',
+    country_of_origin: 'United States',
+    relationship_status: 'Married',
   },
   {
-    firstName: 'Cristiano',
-    lastName: 'Ronaldo',
+    first_name: 'Cristiano',
+    last_name: 'Ronaldo',
     image:
       'https://c4.wallpaperflare.com/wallpaper/451/899/608/cristiano-ronaldo-4k-wallpaper-preview.jpg',
     age: 37,
@@ -77,15 +76,14 @@ const celebrities = [
       zipCode: '24680',
     },
     hobbies: ['Football', 'Fitness', 'Fashion'],
-    isAdmin: false,
     bio: 'Renowned footballer and fitness enthusiast with a passion for fashion.',
     occupation: 'Footballer',
-    countryOfOrigin: 'Portugal',
-    relationshipStatus: 'In a Relationship',
+    country_of_origin: 'Portugal',
+    relationship_status: 'In a Relationship',
   },
   {
-    firstName: 'Angela',
-    lastName: 'Merkel',
+    first_name: 'Angela',
+    last_name: 'Merkel',
     image:
       'https://c1.wallpaperflare.com/preview/552/379/597/angela-merkel-europe.jpg',
     age: 68,
@@ -97,15 +95,15 @@ const celebrities = [
       zipCode: '86420',
     },
     hobbies: ['Politics', 'Reading', 'Hiking'],
-    isAdmin: true,
+
     bio: 'Former Chancellor of Germany known for her leadership in European politics.',
     occupation: 'Politician',
-    countryOfOrigin: 'Germany',
-    relationshipStatus: 'Widowed',
+    country_of_origin: 'Germany',
+    relationship_status: 'Widowed',
   },
   {
-    firstName: 'Malala',
-    lastName: 'Yousafzai',
+    first_name: 'Malala',
+    last_name: 'Yousafzai',
     image:
       'https://c4.wallpaperflare.com/wallpaper/277/205/302/nobel-prize-winner-inspiration-malala-yousafzai-8k-wallpaper-preview.jpg',
     age: 24,
@@ -117,15 +115,14 @@ const celebrities = [
       zipCode: '97531',
     },
     hobbies: ['Education Advocacy', 'Writing', 'Public Speaking'],
-    isAdmin: false,
     bio: "Nobel laureate and advocate for girls' education worldwide.",
     occupation: 'Activist',
-    countryOfOrigin: 'Pakistan',
-    relationshipStatus: 'Single',
+    country_of_origin: 'Pakistan',
+    relationship_status: 'Single',
   },
   {
-    firstName: 'LeBron',
-    lastName: 'James',
+    first_name: 'LeBron',
+    last_name: 'James',
     image:
       'https://c4.wallpaperflare.com/wallpaper/624/728/54/basketball-lebron-james-american-nba-wallpaper-preview.jpg',
     age: 37,
@@ -137,16 +134,15 @@ const celebrities = [
       zipCode: '75321',
     },
     hobbies: ['Basketball', 'Business', 'Philanthropy'],
-    isAdmin: false,
     bio: 'NBA superstar, businessman, and philanthropist committed to social causes.',
     occupation: 'Basketball Player',
-    countryOfOrigin: 'United States',
-    relationshipStatus: 'Married',
+    country_of_origin: 'United States',
+    relationship_status: 'Married',
   },
 
   {
-    firstName: 'Adele',
-    lastName: 'Adkins',
+    first_name: 'Adele',
+    last_name: 'Adkins',
     image:
       'https://c4.wallpaperflare.com/wallpaper/146/297/282/singer-composer-adele-adele-wallpaper-preview.jpg',
     age: 33,
@@ -158,46 +154,94 @@ const celebrities = [
       zipCode: '25814',
     },
     hobbies: ['Singing', 'Songwriting', 'Cooking'],
-    isAdmin: false,
     bio: 'Grammy-winning singer-songwriter with a soulful voice and a love for cooking.',
     occupation: 'Musician',
-    countryOfOrigin: 'United Kingdom',
-    relationshipStatus: 'Divorced',
+    country_of_origin: 'United Kingdom',
+    relationship_status: 'Divorced',
   },
 ];
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState(celebrities);
+  const [searchResults, setSearchResults] = useState([]);
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   const SearchResultCard = ({ profile }) => (
     <div className="max-w-sm rounded overflow-hidden shadow-md m-4 h-1/2 w-1/2">
       <img
         src={profile.image}
-        alt={profile.firstName}
+        alt={profile.first_name}
         className="w-full h-64 object-cover"
       />
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{`${profile.firstName} ${profile.lastName}`}</div>
+        <div className="font-bold text-xl mb-2">{`${profile.first_name} ${profile.last_name}`}</div>
         <p>{`Age: ${profile.age}`}</p>
       </div>
     </div>
   );
 
+  useEffect(() => {
+    fetchCelebrities();
+  }, []);
+
+  // fetch celebrities from supabase
+  const fetchCelebrities = async () => {
+    const { data, error } = await supabase
+      .from('celebrities')
+      .select('*')
+      .order('first_name', { ascending: true });
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+      setSearchResults(data);
+    }
+    setSearchResults(data);
+  };
+
+  const postToSetup = async () => {
+    const res = await fetch('/api/config-table', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        celebrities: celebrities,
+      }),
+    });
+    const data = await res.json();
+
+    console.log(data);
+  };
+
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add logic to perform search based on `searchTerm` here
-    const filteredResults = celebrities.filter((profile) =>
-      `${profile.firstName} ${profile.lastName}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-    );
-    setSearchResults(filteredResults);
+
+    if (searchTerm.trim() === '') {
+      // If the search term is empty, fetch the original list from Supabase
+      await fetchCelebrities();
+    } else {
+      // If there is a search term, filter the results based on it
+      const { data, error } = await supabase
+        .from('celebrities')
+        .select('*')
+        .ilike('first_name', `%${searchTerm}%`)
+        .order('first_name', { ascending: true });
+
+      if (error) {
+        console.log(error);
+      } else {
+        setSearchResults(data);
+      }
+    }
   };
+
   return (
     <div className="py-16 w-full flex justify-center items-center bg-gray-100 flex-col overflow-y-scroll">
       <form
