@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
+import { supabaseClient } from '../../../../utils/supabaseClient';
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { celebrities } = body;
 
-  // Initialize the Supabase client with your Supabase URL and API key
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  // Initialize the OpenAI client with your API key
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   });
@@ -33,7 +29,7 @@ export async function POST(req: NextRequest) {
         const modifiedItem = { ...item, embeddings };
 
         // Post the modified item to the 'profiles' table in Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('celebrities')
           .upsert([modifiedItem]);
 

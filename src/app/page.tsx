@@ -2,164 +2,164 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
-const celebrities = [
-  {
-    first_name: 'Elon',
-    last_name: 'Musk',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/1012/124/930/men-elon-musk-wallpaper-preview.jpg',
-    age: 50,
-    email: 'elon.musk@example.com',
-    address: {
-      street: 'SpaceX Blvd',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipCode: '54321',
-    },
-    hobbies: ['Inventing', 'Space Exploration', 'Twitter'],
+// const celebrities = [
+//   {
+//     first_name: 'Elon',
+//     last_name: 'Musk',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/1012/124/930/men-elon-musk-wallpaper-preview.jpg',
+//     age: 50,
+//     email: 'elon.musk@example.com',
+//     address: {
+//       street: 'SpaceX Blvd',
+//       city: 'Los Angeles',
+//       state: 'CA',
+//       zipCode: '54321',
+//     },
+//     hobbies: ['Inventing', 'Space Exploration', 'Twitter'],
 
-    bio: 'Entrepreneur, inventor, and CEO known for founding SpaceX and Tesla.',
-    occupation: 'CEO',
-    country_of_origin: 'United States',
-    relationship_status: 'Divorced',
-  },
-  {
-    first_name: 'Oprah',
-    last_name: 'Winfrey',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/825/71/753/aretha-franklin-haircut-dress-makeup-wallpaper-preview.jpg',
-    age: 68,
-    email: 'oprah.winfrey@example.com',
-    address: {
-      street: 'Harpo Studios',
-      city: 'Chicago',
-      state: 'IL',
-      zipCode: '98765',
-    },
-    hobbies: ['Media Production', 'Philanthropy', 'Book Club'],
-    bio: 'Media mogul, talk show host, and philanthropist with a passion for literature.',
-    occupation: 'Media Mogul',
-    country_of_origin: 'United States',
-    relationship_status: 'Single',
-  },
+//     bio: 'Entrepreneur, inventor, and CEO known for founding SpaceX and Tesla.',
+//     occupation: 'CEO',
+//     country_of_origin: 'United States',
+//     relationship_status: 'Divorced',
+//   },
+//   {
+//     first_name: 'Oprah',
+//     last_name: 'Winfrey',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/825/71/753/aretha-franklin-haircut-dress-makeup-wallpaper-preview.jpg',
+//     age: 68,
+//     email: 'oprah.winfrey@example.com',
+//     address: {
+//       street: 'Harpo Studios',
+//       city: 'Chicago',
+//       state: 'IL',
+//       zipCode: '98765',
+//     },
+//     hobbies: ['Media Production', 'Philanthropy', 'Book Club'],
+//     bio: 'Media mogul, talk show host, and philanthropist with a passion for literature.',
+//     occupation: 'Media Mogul',
+//     country_of_origin: 'United States',
+//     relationship_status: 'Single',
+//   },
 
-  {
-    first_name: 'Beyoncé',
-    last_name: 'Knowles',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/624/628/63/beyonce-knowles-8-wallpaper-preview.jpg',
-    age: 40,
-    email: 'beyonce.knowles@example.com',
-    address: {
-      street: 'Music Ave',
-      city: 'Houston',
-      state: 'TX',
-      zipCode: '13579',
-    },
-    hobbies: ['Singing', 'Dancing', 'Acting'],
-    bio: 'International music icon, singer, and actress with a powerful stage presence.',
-    occupation: 'Musician',
-    country_of_origin: 'United States',
-    relationship_status: 'Married',
-  },
-  {
-    first_name: 'Cristiano',
-    last_name: 'Ronaldo',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/451/899/608/cristiano-ronaldo-4k-wallpaper-preview.jpg',
-    age: 37,
-    email: 'cristiano.ronaldo@example.com',
-    address: {
-      street: 'Soccer Stadium',
-      city: 'Turin',
-      state: 'Piemonte',
-      zipCode: '24680',
-    },
-    hobbies: ['Football', 'Fitness', 'Fashion'],
-    bio: 'Renowned footballer and fitness enthusiast with a passion for fashion.',
-    occupation: 'Footballer',
-    country_of_origin: 'Portugal',
-    relationship_status: 'In a Relationship',
-  },
-  {
-    first_name: 'Angela',
-    last_name: 'Merkel',
-    image:
-      'https://c1.wallpaperflare.com/preview/552/379/597/angela-merkel-europe.jpg',
-    age: 68,
-    email: 'angela.merkel@example.com',
-    address: {
-      street: "Chancellor's Office",
-      city: 'Berlin',
-      state: 'Berlin',
-      zipCode: '86420',
-    },
-    hobbies: ['Politics', 'Reading', 'Hiking'],
+//   {
+//     first_name: 'Beyoncé',
+//     last_name: 'Knowles',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/624/628/63/beyonce-knowles-8-wallpaper-preview.jpg',
+//     age: 40,
+//     email: 'beyonce.knowles@example.com',
+//     address: {
+//       street: 'Music Ave',
+//       city: 'Houston',
+//       state: 'TX',
+//       zipCode: '13579',
+//     },
+//     hobbies: ['Singing', 'Dancing', 'Acting'],
+//     bio: 'International music icon, singer, and actress with a powerful stage presence.',
+//     occupation: 'Musician',
+//     country_of_origin: 'United States',
+//     relationship_status: 'Married',
+//   },
+//   {
+//     first_name: 'Cristiano',
+//     last_name: 'Ronaldo',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/451/899/608/cristiano-ronaldo-4k-wallpaper-preview.jpg',
+//     age: 37,
+//     email: 'cristiano.ronaldo@example.com',
+//     address: {
+//       street: 'Soccer Stadium',
+//       city: 'Turin',
+//       state: 'Piemonte',
+//       zipCode: '24680',
+//     },
+//     hobbies: ['Football', 'Fitness', 'Fashion'],
+//     bio: 'Renowned footballer and fitness enthusiast with a passion for fashion.',
+//     occupation: 'Footballer',
+//     country_of_origin: 'Portugal',
+//     relationship_status: 'In a Relationship',
+//   },
+//   {
+//     first_name: 'Angela',
+//     last_name: 'Merkel',
+//     image:
+//       'https://c1.wallpaperflare.com/preview/552/379/597/angela-merkel-europe.jpg',
+//     age: 68,
+//     email: 'angela.merkel@example.com',
+//     address: {
+//       street: "Chancellor's Office",
+//       city: 'Berlin',
+//       state: 'Berlin',
+//       zipCode: '86420',
+//     },
+//     hobbies: ['Politics', 'Reading', 'Hiking'],
 
-    bio: 'Former Chancellor of Germany known for her leadership in European politics.',
-    occupation: 'Politician',
-    country_of_origin: 'Germany',
-    relationship_status: 'Widowed',
-  },
-  {
-    first_name: 'Malala',
-    last_name: 'Yousafzai',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/277/205/302/nobel-prize-winner-inspiration-malala-yousafzai-8k-wallpaper-preview.jpg',
-    age: 24,
-    email: 'malala.yousafzai@example.com',
-    address: {
-      street: 'Education Street',
-      city: 'Birmingham',
-      state: 'England',
-      zipCode: '97531',
-    },
-    hobbies: ['Education Advocacy', 'Writing', 'Public Speaking'],
-    bio: "Nobel laureate and advocate for girls' education worldwide.",
-    occupation: 'Activist',
-    country_of_origin: 'Pakistan',
-    relationship_status: 'Single',
-  },
-  {
-    first_name: 'LeBron',
-    last_name: 'James',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/624/728/54/basketball-lebron-james-american-nba-wallpaper-preview.jpg',
-    age: 37,
-    email: 'lebron.james@example.com',
-    address: {
-      street: 'Basketball Court',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipCode: '75321',
-    },
-    hobbies: ['Basketball', 'Business', 'Philanthropy'],
-    bio: 'NBA superstar, businessman, and philanthropist committed to social causes.',
-    occupation: 'Basketball Player',
-    country_of_origin: 'United States',
-    relationship_status: 'Married',
-  },
+//     bio: 'Former Chancellor of Germany known for her leadership in European politics.',
+//     occupation: 'Politician',
+//     country_of_origin: 'Germany',
+//     relationship_status: 'Widowed',
+//   },
+//   {
+//     first_name: 'Malala',
+//     last_name: 'Yousafzai',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/277/205/302/nobel-prize-winner-inspiration-malala-yousafzai-8k-wallpaper-preview.jpg',
+//     age: 24,
+//     email: 'malala.yousafzai@example.com',
+//     address: {
+//       street: 'Education Street',
+//       city: 'Birmingham',
+//       state: 'England',
+//       zipCode: '97531',
+//     },
+//     hobbies: ['Education Advocacy', 'Writing', 'Public Speaking'],
+//     bio: "Nobel laureate and advocate for girls' education worldwide.",
+//     occupation: 'Activist',
+//     country_of_origin: 'Pakistan',
+//     relationship_status: 'Single',
+//   },
+//   {
+//     first_name: 'LeBron',
+//     last_name: 'James',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/624/728/54/basketball-lebron-james-american-nba-wallpaper-preview.jpg',
+//     age: 37,
+//     email: 'lebron.james@example.com',
+//     address: {
+//       street: 'Basketball Court',
+//       city: 'Los Angeles',
+//       state: 'CA',
+//       zipCode: '75321',
+//     },
+//     hobbies: ['Basketball', 'Business', 'Philanthropy'],
+//     bio: 'NBA superstar, businessman, and philanthropist committed to social causes.',
+//     occupation: 'Basketball Player',
+//     country_of_origin: 'United States',
+//     relationship_status: 'Married',
+//   },
 
-  {
-    first_name: 'Adele',
-    last_name: 'Adkins',
-    image:
-      'https://c4.wallpaperflare.com/wallpaper/146/297/282/singer-composer-adele-adele-wallpaper-preview.jpg',
-    age: 33,
-    email: 'adele.adkins@example.com',
-    address: {
-      street: 'Music Lane',
-      city: 'London',
-      state: 'England',
-      zipCode: '25814',
-    },
-    hobbies: ['Singing', 'Songwriting', 'Cooking'],
-    bio: 'Grammy-winning singer-songwriter with a soulful voice and a love for cooking.',
-    occupation: 'Musician',
-    country_of_origin: 'United Kingdom',
-    relationship_status: 'Divorced',
-  },
-];
+//   {
+//     first_name: 'Adele',
+//     last_name: 'Adkins',
+//     image:
+//       'https://c4.wallpaperflare.com/wallpaper/146/297/282/singer-composer-adele-adele-wallpaper-preview.jpg',
+//     age: 33,
+//     email: 'adele.adkins@example.com',
+//     address: {
+//       street: 'Music Lane',
+//       city: 'London',
+//       state: 'England',
+//       zipCode: '25814',
+//     },
+//     hobbies: ['Singing', 'Songwriting', 'Cooking'],
+//     bio: 'Grammy-winning singer-songwriter with a soulful voice and a love for cooking.',
+//     occupation: 'Musician',
+//     country_of_origin: 'United Kingdom',
+//     relationship_status: 'Divorced',
+//   },
+// ];
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -168,7 +168,7 @@ export default function Home() {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const SearchResultCard = ({ profile }) => (
+  const CelebrityProfileCard = ({ profile }) => (
     <div className="max-w-sm rounded overflow-hidden shadow-md m-4 h-1/2 w-1/2">
       <img
         src={profile.image}
@@ -201,20 +201,20 @@ export default function Home() {
     setSearchResults(data);
   };
 
-  const postToSetup = async () => {
-    const res = await fetch('/api/config-table', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        celebrities: celebrities,
-      }),
-    });
-    const data = await res.json();
+  // const postToSetup = async () => {
+  //   const res = await fetch('/api/config-table', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       celebrities: celebrities,
+  //     }),
+  //   });
+  //   const data = await res.json();
 
-    console.log(data);
-  };
+  //   console.log(data);
+  // };
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -223,22 +223,33 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // REGULAR SERACH
+    // search the celebrities array for the search term
+    // const searchResults = celebrities.filter((profile) => {
+    //   const fullName = `${profile.first_name} ${profile.last_name}`;
+    //   return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+    // });
+    // setSearchResults(searchResults);
+    // console.log(searchResults);
+
+    //VECTTOR
     if (searchTerm.trim() === '') {
       // If the search term is empty, fetch the original list from Supabase
       await fetchCelebrities();
     } else {
-      // If there is a search term, filter the results based on it
-      const { data, error } = await supabase
-        .from('celebrities')
-        .select('*')
-        .ilike('first_name', `%${searchTerm}%`)
-        .order('first_name', { ascending: true });
+      const semanticSearrch = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchTerm: searchTerm,
+        }),
+      });
 
-      if (error) {
-        console.log(error);
-      } else {
-        setSearchResults(data);
-      }
+      const semanticSearrchResponse = await semanticSearrch.json();
+      console.log(semanticSearrchResponse.data);
+      setSearchResults(semanticSearrchResponse.data);
     }
   };
 
@@ -264,9 +275,15 @@ export default function Home() {
       </form>
       <div className="flex flex-wrap justify-center overflow-y-auto">
         {searchResults.map((profile, index) => (
-          <SearchResultCard key={index} profile={profile} />
+          <CelebrityProfileCard key={index} profile={profile} />
         ))}
       </div>
+      {/* <button
+        className="px-4 py-2 bg-green-500 text-white rounded-r-lg"
+        onClick={postToSetup}
+      >
+        Setup
+      </button> */}
     </div>
   );
 }
