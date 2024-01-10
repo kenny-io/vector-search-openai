@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   });
 
   // Function to generate OpenAI embeddings for a given text
-  async function generateOpenAIEmbeddings(profile) {
+  async function generateOpenAIEmbeddings(profile: any) {
     const textToEmbed = Object.values(profile).join(' ');
     const response = await openai.embeddings.create({
       model: 'text-embedding-ada-002',
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   try {
     // Map over the array and process each item
     const processedDataArray = await Promise.all(
-      celebrities.map(async (item) => {
+      celebrities.map(async (item: any) => {
         // Generate OpenAI embeddings for the entire profile object
         const embeddings = await generateOpenAIEmbeddings(item);
         // Modify the item to add an 'embeddings' property
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       success: true,
       results: processedDataArray,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Unexpected error:', error.message);
     return NextResponse.json({
       status: 500,
